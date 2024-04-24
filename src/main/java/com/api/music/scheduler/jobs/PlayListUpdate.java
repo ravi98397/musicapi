@@ -1,11 +1,8 @@
 package com.api.music.scheduler.jobs;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,8 +12,7 @@ import com.api.music.model.Playlist;
 import com.api.music.model.Song;
 import com.api.music.service.impl.PlaylistServiceImpl;
 import com.api.music.service.impl.SongServiceImpl;
-import com.api.music.service.impl.UserServiceImpl;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
+import com.api.music.service.impl.UsersServiceImpl;
 
 
 @Service
@@ -29,9 +25,9 @@ public class PlayListUpdate {
 	PlaylistServiceImpl playlistService;
 	
 	@Autowired
-	UserServiceImpl userServiceImpl;
+	UsersServiceImpl userServiceImpl;
 	
-	@Scheduled(cron = "${interval-in-cron}")
+	// @Scheduled(cron = "${interval-in-cron}")
 	public void updateTrendingSongsPlaylist() {
 		
 		System.out.println("running update trending playlist job");
@@ -85,7 +81,7 @@ public class PlayListUpdate {
 	public void updateNewSongsPlaylist() {
 		
 		System.out.println("running update latest playlist job");
-		int year = LocalDateTime.now().getYear();
+		//int year = LocalDateTime.now().getYear();
 		
 		
 		PageRequest request = PageRequest.of(1, 20, Sort.by(Sort.Direction.DESC, "year"));
@@ -106,6 +102,29 @@ public class PlayListUpdate {
 			p.setSongs(newsongs);
 			playlistService.update(p);
 		}
+	}
+	
+	@Scheduled(cron = "${interval-in-cron}")
+	public void updateOldSongsPlaylist() {
+		
+		System.out.println("running update old playlist job");
+		
+		
+		PageRequest request = PageRequest.of(1, 50, Sort.by(Sort.Direction.ASC, "year").and(Sort.by(Sort.Direction.DESC, "played")));	
+		Set<Song> oldsongs = songService.getAll(request).toSet();
+		
+		long user_id = userServiceImpl.getUserIdByUsername("dhunn");
+		System.out.println(user_id);
+		Playlist p = playlistService.getPlaylist(user_id, "Old_Songs");
+		if(p != null) {
+			System.out.println(oldsongs.size() + ", " + p.getSongs().size());
+		}else {
+			System.out.println("nullllll");
+		}
+			
+		
+		p.setSongs(oldsongs);
+		playlistService.update(p);
 	}
 	
 }

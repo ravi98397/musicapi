@@ -21,14 +21,14 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 @NoArgsConstructor
-@Table(name="Song", uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"name"})
-})
+@Table(name="SONG")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode(exclude = {"songs"})
 public class Song {
@@ -38,8 +38,8 @@ public class Song {
 	private long id;
 	
 	private String name;
-	private int year;
-	private String date;
+	private int releaseyear;
+	private String createdon;
 	private float duration;
 	private int likes;
 	private int played;   //no of time played will help in the ranking of the songs against other songs.
@@ -189,27 +189,6 @@ public class Song {
 		this.playlists = new HashSet<Playlist>();
 	}
 
-
-	public int getYear() {
-		return year;
-	}
-
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-
-	public String getDate() {
-		return date;
-	}
-
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-
 	public int getPlayed() {
 		return played;
 	}
@@ -284,4 +263,19 @@ public class Song {
 		this.downloadlink320kbps = downloadlink320kbps;
 	}
 	
+	public int getReleaseyear() {
+		return releaseyear;
+	}
+
+	public void setReleaseyear(int releaseyear) {
+		this.releaseyear = releaseyear;
+	}
+
+	public String getCreatedon() {
+		return createdon;
+	}
+
+	public void setCreatedon(String createdon) {
+		this.createdon = createdon;
+	}
 }

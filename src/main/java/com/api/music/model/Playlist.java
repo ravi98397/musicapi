@@ -30,7 +30,7 @@ import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
-@Table(name="playlist")
+@Table(name="PLAYLIST")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Playlist {
 	

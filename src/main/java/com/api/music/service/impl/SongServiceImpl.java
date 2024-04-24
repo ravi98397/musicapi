@@ -4,16 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.api.music.model.Artist;
-import com.api.music.model.Genre;
-import com.api.music.model.Musician;
-import com.api.music.model.Playlist;
 import com.api.music.model.Song;
 import com.api.music.repository.SongRepository;
 import com.api.music.service.BaseService;

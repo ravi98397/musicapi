@@ -18,12 +18,14 @@ import org.springframework.cache.annotation.Cacheable;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Entity
+@Data
 @Cacheable
-@Table(name="Album", uniqueConstraints = {
+@Table(name="ALBUM", uniqueConstraints = {
 		@UniqueConstraint(columnNames = {"id","id"}),
 		@UniqueConstraint(columnNames = {"name", "name"})
 })

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.music.model.Playlist;
-import com.api.music.model.User;
+import com.api.music.model.Users;
 import com.api.music.service.impl.PlaylistServiceImpl;
-import com.api.music.service.impl.UserServiceImpl;
+import com.api.music.service.impl.UsersServiceImpl;
 
 
 @RestController
@@ -26,25 +26,25 @@ import com.api.music.service.impl.UserServiceImpl;
 public class UserController{
 	
 	@Autowired
-	UserServiceImpl userService;
+	UsersServiceImpl userService;
 	
 	@Autowired
 	PlaylistServiceImpl playlistService;
 	
 	@PostMapping("/login")
-	public User login(@RequestParam String username, @RequestParam String password) {
+	public Users login(@RequestParam String username, @RequestParam String password) {
 		return userService.authenticate(username, password);
 	}
 
 
 
 	@PostMapping("/create")
-	public User add(@RequestBody User obj) {
+	public Users add(@RequestBody Users obj) {
 		return userService.create(obj);
 	}
 
 	@PutMapping("/update")
-	public User update(User obj) {
+	public Users update(Users obj) {
 		return userService.update(obj);
 	}
 
@@ -54,8 +54,8 @@ public class UserController{
 	}
 	
 	@PutMapping("/{username}/add/playlist/")
-	public User addPlaylist(@PathVariable String username, @RequestBody Playlist playlist) {
-		User user = userService.getByUserName(username);
+	public Users addPlaylist(@PathVariable String username, @RequestBody Playlist playlist) {
+		Users user = userService.getByUserName(username);
 		if(user == null) {
 			System.out.println("user not found");
 			return null;

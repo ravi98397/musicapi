@@ -35,6 +35,7 @@ public class AlbumController implements BaseController<Album> {
 
 	@GetMapping("/getById")
 	public Album getById(@RequestParam Long id) {
+		System.out.println(service.getById(id));
 		return service.getById(id);
 	}
 	

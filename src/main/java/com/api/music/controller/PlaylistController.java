@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.music.model.Playlist;
 import com.api.music.model.Song;
 import com.api.music.service.impl.PlaylistServiceImpl;
-import com.api.music.service.impl.UserServiceImpl;
+import com.api.music.service.impl.UsersServiceImpl;
 
 
 @RestController
@@ -29,7 +29,7 @@ public class PlaylistController implements BaseController<Playlist> {
 	private PlaylistServiceImpl service;
 	
 	@Autowired
-	private UserServiceImpl userService;
+	private UsersServiceImpl userService;
 	
 	@GetMapping("/getAll")
 	public ResponseEntity<Collection<Playlist>> getAll(@RequestParam int pageno) {

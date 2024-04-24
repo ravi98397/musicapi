@@ -34,6 +34,7 @@ public class SongController implements BaseController<Song> {
 
 	@GetMapping("/getById")
 	public Song getById(@RequestParam Long id) {
+		System.out.println("id received : " + id);
 		return songService.getById(id);
 	}
 	
