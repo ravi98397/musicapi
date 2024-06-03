@@ -70,8 +70,6 @@ public class ArtistServiceImpl implements BaseService<Artist>{
 		if(obj == null) return null;
 		if(obj.getId() > 0) return null;
 		
-		obj.clearSongs();
-		
 		return artistRepository.save(obj);
 	}
 	

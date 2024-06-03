@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -23,7 +24,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @Table(name="ARTIST")
 @Cacheable
@@ -39,10 +39,10 @@ public class Artist {
 	private String name;
 	private int age;
 	
-	@ManyToMany(mappedBy = "artists",cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-	@Fetch(value = FetchMode.SELECT)
-	@JsonIgnoreProperties("artists")
-	private Set<Song> songs = new HashSet<Song>();
+	// @ManyToMany(mappedBy = "artists",cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+	// @Fetch(value = FetchMode.SELECT)
+	// @JsonIgnoreProperties("artists")
+	// private Set<Song> songs = new HashSet<Song>();
 
 	public long getId() {
 		return id;
@@ -68,23 +68,6 @@ public class Artist {
 		this.age = age;
 	}
 	
-	public Set<Song> getSongs() {
-		return songs;
-	}
-
-	public void setSongs(Set<Song> songs) {
-		for(Song i: songs) {
-			this.songs.add(i);
-		}
-	}
-	
-	public void setSong(Song song) {
-		this.songs.add(song);
-	}
-	
-	public void clearSongs() {
-		this.songs = new HashSet<Song>();
-	}
 	
 	
 }

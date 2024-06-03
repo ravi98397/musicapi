@@ -66,7 +66,6 @@ public class GenreServiceImpl implements BaseService<Genre>{
 		if(obj == null) return null;
 		if(obj.getId() > 0) return null;
 		
-		obj.clearSongs();
 		return genreRepository.save(obj);
 	}
 	

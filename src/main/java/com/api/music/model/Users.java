@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+// @Entity
 @Table(name = "USERS")
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -56,8 +56,8 @@ public class Users {
 	private String password;
 	
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="user_id",referencedColumnName = "id")
+	// @OneToMany(cascade = CascadeType.ALL)
+	// @JoinColumn(name="user_id",referencedColumnName = "id")
 	private Set<Playlist> playlists = new HashSet<Playlist>();
 
 	public long getId() {

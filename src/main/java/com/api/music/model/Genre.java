@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @Table(name="Genre", uniqueConstraints = {
@@ -36,10 +35,6 @@ public class Genre {
 	String name;
 	String discription;
 	
-
-	@ManyToMany(mappedBy = "genres",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@Fetch(value=FetchMode.SELECT)
-	private Set<Song> songs = new HashSet<Song>();
 	//private Set<Song> songs = new HashSet<Song> ();
 	
 	public long getId() {
@@ -64,24 +59,5 @@ public class Genre {
 
 	public void setDiscription(String discription) {
 		this.discription = discription;
-	}
-	
-	public Set<Song> getSongs() {
-		return songs;
-	}
-	
-	
-	public void setSongs(Set<Song> songs) {
-		for(Song s: songs) {
-			this.songs.add(s);
-		}
-	}
-	
-	public void setSong(Song song) {
-		this.songs.add(song);
-	}
-	
-	public void clearSongs() {
-		this.songs = new HashSet<Song>();
 	}
 }

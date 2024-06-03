@@ -28,7 +28,6 @@ import lombok.Builder.Default;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
 @NoArgsConstructor
 @Table(name="PLAYLIST")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -49,12 +48,12 @@ public class Playlist {
 	private String createdon = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
 	
 	
-	@ManyToMany(targetEntity = Song.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(joinColumns = @JoinColumn(name = "playlist_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "song_id")
-			)
-	@Fetch(value=FetchMode.SELECT)
-	@JsonIgnoreProperties("playlists")
+	// @ManyToMany(targetEntity = Song.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	// @JoinTable(joinColumns = @JoinColumn(name = "playlist_id", referencedColumnName = "id"),
+	// 		inverseJoinColumns = @JoinColumn(name = "song_id")
+	// 		)
+	// @Fetch(value=FetchMode.SELECT)
+	// @JsonIgnoreProperties("playlists")
 	private Set<Song> songs = new HashSet<Song>();
 	//Set<Song> songs = new HashSet<>();
 

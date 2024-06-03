@@ -58,7 +58,6 @@ public class MusicianServiceImpl implements BaseService<Musician> {
 	@Override
 	public Musician add(Musician obj) {
 		if(obj.getId() != 0) return null;
-		obj.clearSongs();
 		return musicianRepository.save(obj);
 	}
 

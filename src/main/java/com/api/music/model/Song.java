@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -54,228 +55,96 @@ public class Song {
 	@Fetch(value = FetchMode.SELECT)
 	@JsonIgnoreProperties("songs")
 	private Album album;
+
+	
 	
 	//many to many relationship with musicians
-	@ManyToMany(targetEntity = Musician.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(
-			joinColumns = @JoinColumn(name="song_id"),
-			inverseJoinColumns = @JoinColumn(name="musician_id")
-			)
-	@Fetch(value = FetchMode.SELECT)
-	@JsonIgnoreProperties("songs")
-	private Set<Musician> musicBy = new HashSet<Musician>();
+	// @ManyToMany(targetEntity = Musician.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JoinTable(
+	// 		joinColumns = @JoinColumn(name="song_id"),
+	// 		inverseJoinColumns = @JoinColumn(name="musician_id")
+	// 		)
+	// @Fetch(value = FetchMode.SELECT)
+	// @JsonIgnoreProperties("songs")
+	// private Set<Musician> musicBy = new HashSet<Musician>();
+
+	//@OneToMany(targetEntity=SongMusicBy.class, mappedBy="song",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY)
+	private Set<SongMusicBy> musicBy = new HashSet<SongMusicBy>();
 	
 	
-	//many to many relationship with artists
-	@ManyToMany(targetEntity = Artist.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(
-			joinColumns = @JoinColumn(name="song_id"),
-			inverseJoinColumns = @JoinColumn(name="artist_id")
-			)
-	@Fetch(value = FetchMode.SELECT)
-	@JsonIgnoreProperties("songs")
-	private Set<Artist> artists = new HashSet<Artist>();
+	// //many to many relationship with artists
+	// @ManyToMany(targetEntity = Artist.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JoinTable(
+	// 		joinColumns = @JoinColumn(name="song_id"),
+	// 		inverseJoinColumns = @JoinColumn(name="artist_id")
+	// 		)
+	// @Fetch(value = FetchMode.SELECT)
+	// @JsonIgnoreProperties("songs")
+	// private Set<Artist> artists = new HashSet<Artist>();
+
+	//@OneToMany(targetEntity=SongArtists.class, mappedBy="song",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY)
+	private Set<SongArtists> artists = new HashSet<SongArtists>();
 	
 	
 	//many to many relationship with genre
-	@ManyToMany(targetEntity = Genre.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(
-			joinColumns = @JoinColumn(name="song_id"),
-			inverseJoinColumns = @JoinColumn(name="genre_id")
-			)
-	@Fetch(value = FetchMode.SELECT)
-	@JsonIgnoreProperties("songs")
-	private Set<Genre> genres = new HashSet<Genre>();
+	// @ManyToMany(targetEntity = Genre.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JoinTable(
+	// 		joinColumns = @JoinColumn(name="song_id"),
+	// 		inverseJoinColumns = @JoinColumn(name="genre_id")
+	// 		)
+	// @Fetch(value = FetchMode.SELECT)
+	// @JsonIgnoreProperties("songs")
+	// private Set<Genre> genres = new HashSet<Genre>();
 		
-	
+	//@OneToMany(targetEntity=SongGenres.class, mappedBy="song",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY)
+	private Set<SongGenres> genres = new HashSet<SongGenres>();
+
 	//many to many with playlists
-	@Fetch(value = FetchMode.SELECT)
-	@ManyToMany(mappedBy = "songs",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonIgnoreProperties("songs")
-	private Set<Playlist> playlists = new HashSet<Playlist>();
+	// @Fetch(value = FetchMode.SELECT)
+	// @ManyToMany(mappedBy = "songs",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	// @JsonIgnoreProperties("songs")
+	// private Set<Playlist> playlists = new HashSet<Playlist>();
+
+	//@OneToMany(targetEntity=SongPlaylists.class, mappedBy="song",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY)
+	private Set<SongPlaylists> playlists = new HashSet<SongPlaylists>();
 	
-	public long getId() {
-		return id;
+	public void addArtist(Artist artist) {
+		this.artists.add(new SongArtists(this.id, artist.getId()));
 	}
 
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public float getDuration() {
-		return duration;
-	}
-
-
-	public void setDuration(float duration) {
-		this.duration = duration;
-	}
-
-
-	public int getLikes() {
-		return likes;
-	}
-
-
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
-	
-	public Set<Artist> getArtists() {
-		return artists;
-	}
-
-
-	public void setArtists(Set<Artist> artists) {
-		for(Artist i : artists) {
-			this.artists.add(i);
+	public void addArtists(Set<Artist> artists) {
+		for(Artist artist : artists) {
+			this.artists.add(new SongArtists(this.id, artist.getId()));
 		}
 	}
-	
-	public void setArtist(Artist artist) {
-		this.artists.add(artist);
-	}
-	
-	public void clearArtists() {
-		this.artists = new HashSet<Artist>();
+
+	public void addMusician(Musician musician) {
+		this.musicBy.add(new SongMusicBy(this.id, musician.getId()));
 	}
 
-	public Set<Genre> getGenres() {
-		return genres;
-	}
-
-
-	public void setGenres(Set<Genre> genres) {
-		for(Genre g : genres) {
-			this.genres.add(g);
+	public void addMusicians(Set<Musician> musicians) {
+		for(Musician musician : musicians) {
+			this.musicBy.add(new SongMusicBy(this.id, musician.getId()));
 		}
 	}
-	
-	public void setGenre(Genre genres) {
-		this.genres.add(genres);
-	}
-	
-	public void clearGenre() {
-		this.genres = new HashSet<Genre>();
-	}
-	
-	public Set<Playlist> getPlaylists() {
-		return playlists;
+
+	public void addGenre(Genre genre) {
+		this.genres.add(new SongGenres(this.id, genre.getId()));
 	}
 
-	public void setPlaylists(Set<Playlist> playlists) {
-		for(Playlist p : playlists) {
-			this.playlists.add(p);
+	public void addGenres(Set<Genre> genres) {
+		for(Genre genre : genres) {
+			this.genres.add(new SongGenres(this.id, genre.getId()));
 		}
 	}
-	
-	public void setPlaylist(Playlist playlists) {
-		this.playlists.add(playlists);
-	}
-	
-	public void clearPlaylist() {
-		this.playlists = new HashSet<Playlist>();
+
+	public void addPlaylist(Playlist playlist) {
+		this.playlists.add(new SongPlaylists(this.id, playlist.getId()));
 	}
 
-	public int getPlayed() {
-		return played;
-	}
-
-
-	public void setPlayed(int played) {
-		this.played = played;
-	}
-
-
-	public Album getAlbum() {
-		return album;
-	}
-
-
-	public void setAlbum(Album album) {
-		this.album = album;
-	}
-
-
-	public Set<Musician> getMusicBy() {
-		return musicBy;
-	}
-
-
-	public void setMusicBy(Set<Musician> musicBy) {
-		for(Musician m : musicBy) {
-			this.musicBy.add(m);
+	public void addPlaylists(Set<Playlist> playlists) {
+		for(Playlist playlist : playlists) {
+			this.playlists.add(new SongPlaylists(this.id, playlist.getId()));
 		}
-	}
-	
-	public void setMusician(Musician musicBy) {
-		this.musicBy.add(musicBy);
-	}
-	
-	public void clearMusician() {
-		this.musicBy = new HashSet<Musician>();
-	}
-	
-	public void clearAllRelation() {
-		this.artists = new HashSet<Artist>();
-		this.playlists = new HashSet<Playlist>();
-		this.genres = new HashSet<Genre>();
-		this.musicBy = new HashSet<Musician>();
-	}
-	
-	public String getImgurl() {
-		return imgurl;
-	}
-
-
-	public void setImgurl(String imgurl) {
-		this.imgurl = imgurl;
-	}
-	
-	public String getDownloadlink128kbps() {
-		return downloadlink128kbps;
-	}
-
-
-	public void setDownloadlink128kbps(String downloadlink128kbps) {
-		this.downloadlink128kbps = downloadlink128kbps;
-	}
-
-
-	public String getDownloadlink320kbps() {
-		return downloadlink320kbps;
-	}
-
-
-	public void setDownloadlink320kbps(String downloadlink320kbps) {
-		this.downloadlink320kbps = downloadlink320kbps;
-	}
-	
-	public int getReleaseyear() {
-		return releaseyear;
-	}
-
-	public void setReleaseyear(int releaseyear) {
-		this.releaseyear = releaseyear;
-	}
-
-	public String getCreatedon() {
-		return createdon;
-	}
-
-	public void setCreatedon(String createdon) {
-		this.createdon = createdon;
 	}
 }

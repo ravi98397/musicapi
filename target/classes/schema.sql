@@ -14,10 +14,18 @@ DROP TABLE IF EXISTS USERS;
 
 CREATE TABLE album (
 id bigint NOT NULL AUTO_INCREMENT,
-name varchar(255) DEFAULT NULL,
+name varchar(255) NOT NULL,
+imgurl varchar(255) DEFAULT NULL,
 PRIMARY KEY (id),
 UNIQUE (name)
 );
+
+CREATE TABLE musician (
+    id bigint NOT NULL AUTO_INCREMENT,
+    name varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 
 
 CREATE TABLE artist (
@@ -92,6 +100,16 @@ genre_id bigint NOT NULL,
 FOREIGN KEY (genre_id) REFERENCES genre (id),
 FOREIGN KEY (album_id) REFERENCES album (id)
 );
+
+CREATE TABLE song_music_by (
+    song_id bigint NOT NULL,
+    musician_id bigint NOT NULL,
+    FOREIGN KEY (musician_id) REFERENCES musician (id),
+    FOREIGN KEY (song_id) REFERENCES song (id)
+);
+
+CREATE INDEX song_music_by_musician_id ON song_music_by (musician_id);
+CREATE INDEX song_music_by_song_id ON song_music_by (song_id);
 
 
 CREATE INDEX album_genres_genre_id ON album_genres (genre_id);

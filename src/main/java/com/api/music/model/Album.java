@@ -16,6 +16,8 @@ import javax.persistence.UniqueConstraint;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -25,10 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Cacheable
-@Table(name="ALBUM", uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"id","id"}),
-		@UniqueConstraint(columnNames = {"name", "name"})
-})
+@Table(name="ALBUM")
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Album {
@@ -42,6 +41,7 @@ public class Album {
 	private String imgurl;
 
 	@OneToMany(targetEntity=Song.class, mappedBy="album",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY) 
+	@JsonIgnoreProperties("songs")
 	private Set<Song> songs = new HashSet<Song>();
 	
 

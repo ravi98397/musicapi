@@ -1,6 +1,8 @@
 package com.api.music.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.api.music.model.Artist;
+import com.api.music.model.Genre;
+import com.api.music.model.Musician;
+import com.api.music.model.Playlist;
 import com.api.music.model.Song;
+import com.api.music.model.SongArtists;
+import com.api.music.model.SongDetails;
+import com.api.music.model.SongGenres;
+import com.api.music.model.SongMusicBy;
+import com.api.music.model.SongPlaylists;
+import com.api.music.repository.ArtistRepository;
 import com.api.music.repository.SongRepository;
 import com.api.music.service.BaseService;
 
@@ -20,7 +32,7 @@ public class SongServiceImpl implements BaseService<Song> {
 	private SongRepository songRepository;
 	
 	@Autowired
-	private ArtistServiceImpl artistService;
+	private ArtistRepository artistRepository;
 	
 	@Autowired
 	private GenreServiceImpl genreService;
@@ -36,15 +48,67 @@ public class SongServiceImpl implements BaseService<Song> {
 		PageRequest request = PageRequest.of(pageno,20);
 		return songRepository.findAll(request);
 	}
-	
+
 	public Page<Song> getAll(PageRequest request) {
-		return songRepository.findAll(request);
+		Page<Song> songs = songRepository.findAll(request);
+		return songs;
 	}
-	
 
 	@Override
 	public Song getById(long id) {
 		return songRepository.findById(id).orElse(null);
+	}
+
+
+	public List<SongDetails> getAllSongDetails(int pageno) {
+		PageRequest request = PageRequest.of(pageno,20);
+
+		Page<Song> songs = songRepository.findAll(request);
+		List<SongDetails> songsDetails = new ArrayList<>();
+		for(Song song : songs) {
+			songsDetails.add(getSongDetailsById(pageno));
+			
+		}
+		return songsDetails;
+	}
+	
+	public SongDetails getSongDetailsById(long id) {
+		Song song = songRepository.findById(id).orElse(null);
+		if(song == null) return null;
+		
+		return getSongDetails(song);
+	}
+
+	public SongDetails getSongDetails(Song song){
+		Set<Artist> artistSet = new HashSet<Artist>();
+		
+		//GetArtistDetails
+		for(SongArtists i : song.getArtists()) {
+			Artist a = artistRepository.findById(i.getArtist_id()).orElse(null);
+			if(a != null) {
+				artistSet.add(a);
+			}
+		}
+
+		//GetGenreDetails
+		Set<Genre> genres = new HashSet<>();
+		for(SongGenres i : song.getGenres()) {
+			genres.add(genreService.getById(i.getGenre_id()));
+		}
+		//GetPlaylistDetails
+		Set<Playlist> playlists = new HashSet<>();
+		for(SongPlaylists i : song.getPlaylists()) {
+			playlists.add(playlistService.getById(i.getPlaylist_id()));
+		}
+		//GetMusicianDetails
+		Set<Musician> musicians = new HashSet<>();
+		for(SongMusicBy i : song.getMusicBy()) {
+			musicians.add(musicianService.getById(i.getMusician_id()));
+		}
+
+		SongDetails songDetails = new SongDetails(song, artistSet, genres, musicians, playlists);
+
+		return songDetails;
 	}
 
 	@Override
@@ -116,7 +180,7 @@ public class SongServiceImpl implements BaseService<Song> {
 		if(obj == null) return null;
 		if(obj.getId() != 0) return null;
 		
-		obj.clearAllRelation();
+		// obj.clearAllRelation();
 		
 		/*
 		if(obj.getAlbum() != null) {
@@ -129,62 +193,62 @@ public class SongServiceImpl implements BaseService<Song> {
 	}
 	
 	
-	public Song mapArtists(long songid,Set<Long> artistids) {
-		if(songid == 0) return null;
+	// public Song mapArtists(long songid,Set<Long> artistids) {
+	// 	if(songid == 0) return null;
 		
-		Song song = getById(songid);
+	// 	Song song = getById(songid);
 		
-		if(song == null) return null;
+	// 	if(song == null) return null;
 		
-		for(long id: artistids) {
-			song.setArtist(artistService.getById(id));
-		}
+	// 	for(long id: artistids) {
+	// 		song.setArtist(artistService.getById(id));
+	// 	}
 		
-		return songRepository.save(song);
-	}
+	// 	return songRepository.save(song);
+	// }
 	
-	public Song mapPlaylists(long songid,Set<Long> playlistids) {
-		if(songid == 0) return null;
+	// public Song mapPlaylists(long songid,Set<Long> playlistids) {
+	// 	if(songid == 0) return null;
 		
-		Song song = getById(songid);
+	// 	Song song = getById(songid);
 		
-		if(song == null) return null;
+	// 	if(song == null) return null;
 		
-		for(long id: playlistids) {
-			song.setPlaylist(playlistService.getById(id));
-		}
+	// 	for(long id: playlistids) {
+	// 		song.setPlaylist(playlistService.getById(id));
+	// 	}
 		
-		return songRepository.save(song);
-	}
+	// 	return songRepository.save(song);
+	// }
 	
-	public Song mapMusicians(long songid,Set<Long> playlistids) {
-		if(songid == 0) return null;
+	// public Song mapMusicians(long songid,Set<Long> playlistids) {
+	// 	if(songid == 0) return null;
 		
-		Song song = getById(songid);
+	// 	Song song = getById(songid);
 		
-		if(song == null) return null;
+	// 	if(song == null) return null;
 		
-		for(long id: playlistids) {
-			song.setMusician(musicianService.getById(id));
-		}
+	// 	for(long id: playlistids) {
+	// 		song.setMusician(musicianService.getById(id));
+	// 	}
 		
-		return songRepository.save(song);
-	}
+	// 	return songRepository.save(song);
+	// }
 	
 	
-	public Song mapGenre(long songid,Set<Long> genreids) {
-		if(songid == 0) return null;
+	// public Song mapGenre(long songid,Set<Long> genreids) {
+	// 	if(songid == 0) return null;
 		
-		Song song = getById(songid);
+	// 	Song song = getById(songid);
 		
-		if(song == null) return null;
+	// 	if(song == null) return null;
 		
-		for(long id: genreids) {
-			song.setGenre(genreService.getById(id));
-		}
+	// 	for(long id: genreids) {
+	// 		song.setGenre(genreService.getById(id));
+	// 	}
 		
-		return songRepository.save(song);
-	}
+	// 	return songRepository.save(song);
+	// }
 	
 	public Page<Song> getTrendingSongs(int pageno){
 		PageRequest request = PageRequest.of(pageno,20);
