@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.music.exceptions.IdNotFoundException;
 import com.api.music.model.Song;
 import com.api.music.service.impl.SongServiceImpl;
 
@@ -34,8 +35,11 @@ public class SongController implements BaseController<Song> {
 
 	@GetMapping("/getById")
 	public Song getById(@RequestParam Long id) {
-		System.out.println("id received : " + id);
-		return songService.getById(id);
+		Song song = songService.getById(id);
+		if(song == null) {
+			throw new IdNotFoundException("provide song id is invalid");
+		}
+		return song;
 	}
 	
 	@GetMapping("/getByName")

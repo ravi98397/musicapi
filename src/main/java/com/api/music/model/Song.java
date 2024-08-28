@@ -1,7 +1,7 @@
 package com.api.music.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -63,7 +63,7 @@ public class Song {
 			)
 	@Fetch(value = FetchMode.SELECT)
 	@JsonIgnoreProperties("songs")
-	private Set<Musician> musicBy = new HashSet<Musician>();
+	private List<Musician> musicBy = new ArrayList<Musician>();
 	
 	
 	//many to many relationship with artists
@@ -74,7 +74,7 @@ public class Song {
 			)
 	@Fetch(value = FetchMode.SELECT)
 	@JsonIgnoreProperties("songs")
-	private Set<Artist> artists = new HashSet<Artist>();
+	private List<Artist> artists = new ArrayList<Artist>();
 	
 	
 	//many to many relationship with genre
@@ -85,14 +85,14 @@ public class Song {
 			)
 	@Fetch(value = FetchMode.SELECT)
 	@JsonIgnoreProperties("songs")
-	private Set<Genre> genres = new HashSet<Genre>();
+	private List<Genre> genres = new ArrayList<Genre>();
 		
 	
 	//many to many with playlists
 	@Fetch(value = FetchMode.SELECT)
 	@ManyToMany(mappedBy = "songs",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnoreProperties("songs")
-	private Set<Playlist> playlists = new HashSet<Playlist>();
+	private List<Playlist> playlists = new ArrayList<Playlist>();
 	
 	public long getId() {
 		return id;
@@ -133,12 +133,12 @@ public class Song {
 		this.likes = likes;
 	}
 	
-	public Set<Artist> getArtists() {
+	public List<Artist> getArtists() {
 		return artists;
 	}
 
 
-	public void setArtists(Set<Artist> artists) {
+	public void setArtists(List<Artist> artists) {
 		for(Artist i : artists) {
 			this.artists.add(i);
 		}
@@ -149,15 +149,15 @@ public class Song {
 	}
 	
 	public void clearArtists() {
-		this.artists = new HashSet<Artist>();
+		this.artists = new ArrayList<Artist>();
 	}
 
-	public Set<Genre> getGenres() {
+	public List<Genre> getGenres() {
 		return genres;
 	}
 
 
-	public void setGenres(Set<Genre> genres) {
+	public void setGenres(List<Genre> genres) {
 		for(Genre g : genres) {
 			this.genres.add(g);
 		}
@@ -168,14 +168,14 @@ public class Song {
 	}
 	
 	public void clearGenre() {
-		this.genres = new HashSet<Genre>();
+		this.genres = new ArrayList<Genre>();
 	}
 	
-	public Set<Playlist> getPlaylists() {
+	public List<Playlist> getPlaylists() {
 		return playlists;
 	}
 
-	public void setPlaylists(Set<Playlist> playlists) {
+	public void setPlaylists(List<Playlist> playlists) {
 		for(Playlist p : playlists) {
 			this.playlists.add(p);
 		}
@@ -186,7 +186,7 @@ public class Song {
 	}
 	
 	public void clearPlaylist() {
-		this.playlists = new HashSet<Playlist>();
+		this.playlists = new ArrayList<Playlist>();
 	}
 
 	public int getPlayed() {
@@ -209,12 +209,12 @@ public class Song {
 	}
 
 
-	public Set<Musician> getMusicBy() {
+	public List<Musician> getMusicBy() {
 		return musicBy;
 	}
 
 
-	public void setMusicBy(Set<Musician> musicBy) {
+	public void setMusicBy(List<Musician> musicBy) {
 		for(Musician m : musicBy) {
 			this.musicBy.add(m);
 		}
@@ -225,14 +225,14 @@ public class Song {
 	}
 	
 	public void clearMusician() {
-		this.musicBy = new HashSet<Musician>();
+		this.musicBy = new ArrayList<Musician>();
 	}
 	
 	public void clearAllRelation() {
-		this.artists = new HashSet<Artist>();
-		this.playlists = new HashSet<Playlist>();
-		this.genres = new HashSet<Genre>();
-		this.musicBy = new HashSet<Musician>();
+		this.artists = new ArrayList<Artist>();
+		this.playlists = new ArrayList<Playlist>();
+		this.genres = new ArrayList<Genre>();
+		this.musicBy = new ArrayList<Musician>();
 	}
 	
 	public String getImgurl() {

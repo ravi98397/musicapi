@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.api.music.exceptions.IdNotFoundException;
 import com.api.music.model.Song;
 import com.api.music.repository.SongRepository;
 import com.api.music.service.BaseService;
@@ -44,7 +46,11 @@ public class SongServiceImpl implements BaseService<Song> {
 
 	@Override
 	public Song getById(long id) {
-		return songRepository.findById(id).orElse(null);
+		Song song = songRepository.findById(id).orElse(null);
+		if(song == null) {
+			throw new IdNotFoundException("invalid song id Exception is thrown form service class");
+		}
+		return song;
 	}
 
 	@Override

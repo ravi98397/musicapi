@@ -1,7 +1,7 @@
 package com.api.music.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +42,7 @@ public class Artist {
 	@ManyToMany(mappedBy = "artists",cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@Fetch(value = FetchMode.SELECT)
 	@JsonIgnoreProperties("artists")
-	private Set<Song> songs = new HashSet<Song>();
+	private List<Song> songs = new ArrayList<Song>();
 
 	public long getId() {
 		return id;
@@ -68,11 +68,11 @@ public class Artist {
 		this.age = age;
 	}
 	
-	public Set<Song> getSongs() {
+	public List<Song> getSongs() {
 		return songs;
 	}
 
-	public void setSongs(Set<Song> songs) {
+	public void setSongs(List<Song> songs) {
 		for(Song i: songs) {
 			this.songs.add(i);
 		}
@@ -83,7 +83,7 @@ public class Artist {
 	}
 	
 	public void clearSongs() {
-		this.songs = new HashSet<Song>();
+		this.songs = new ArrayList<Song>();
 	}
 	
 	

@@ -1,7 +1,7 @@
 package com.api.music.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -42,7 +42,7 @@ public class Album {
 	private String imgurl;
 
 	@OneToMany(targetEntity=Song.class, mappedBy="album",cascade= {CascadeType.MERGE} , fetch = FetchType.LAZY) 
-	private Set<Song> songs = new HashSet<Song>();
+	private List<Song> songs = new ArrayList<Song>();
 	
 
 	public long getId() {
@@ -61,11 +61,11 @@ public class Album {
 		this.name = name;
 	}
 
-	public Set<Song> getSongs() {
+	public List<Song> getSongs() {
 		return songs;
 	}
 	
-	public void setSongs(Set<Song> songs) {
+	public void setSongs(List<Song> songs) {
 		for(Song s : songs) {
 			this.songs.add(s);
 		}
@@ -76,7 +76,7 @@ public class Album {
 	}
 	
 	public void clearSongs() {
-		this.songs = new HashSet<Song>();
+		this.songs = new ArrayList<Song>();
 	}
 	
 	public String toString() {

@@ -1,7 +1,7 @@
 package com.api.music.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -58,7 +58,7 @@ public class Users {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="user_id",referencedColumnName = "id")
-	private Set<Playlist> playlists = new HashSet<Playlist>();
+	private List<Playlist> playlists = new ArrayList<Playlist>();
 
 	public long getId() {
 		return id;
@@ -92,11 +92,11 @@ public class Users {
 		this.dob = dob;
 	}
 
-	public Set<Playlist> getPlaylists() {
+	public List<Playlist> getPlaylists() {
 		return playlists;
 	}
 
-	public void setPlaylists(Set<Playlist> playlists) {
+	public void setPlaylists(List<Playlist> playlists) {
 		for(Playlist p : playlists) {
 			this.playlists.add(p);
 		}
@@ -107,7 +107,7 @@ public class Users {
 	}
 	
 	public void clearPlaylist() {
-		this.playlists = new HashSet<Playlist>();
+		this.playlists = new ArrayList<Playlist>();
 	}
 	
 	public String getGender() {
