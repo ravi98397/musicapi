@@ -82,7 +82,7 @@ local.properties
 
 # Package Files #
 *.jar
-!.mvn/*
+!.mvn/**
 *.war
 *.nar
 *.ear
